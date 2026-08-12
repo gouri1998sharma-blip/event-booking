@@ -28,7 +28,7 @@ export default function Register() {
     e.preventDefault();
     setError('');
     try {
-      await axios.post('http://localhost:5000/api/auth/register', formData);
+      await axios.post('https://event-booking-backend-a858.onrender.com/api/auth/register', formData);
       alert('Registration Successful! Please Login.');
       navigate('/login');
     } catch (err) {

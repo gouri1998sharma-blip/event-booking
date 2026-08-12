@@ -10,7 +10,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/events')
+    axios.get('https://event-booking-backend-a858.onrender.com/api/events')
       .then((res) => {
         setEvents(res.data);
         setLoading(false);

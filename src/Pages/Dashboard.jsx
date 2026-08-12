@@ -30,9 +30,9 @@ export default function Dashboard() {
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 
       const [eventsRes, bookingsRes, usersRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/events').catch(() => ({ data: [] })),
-        axios.get('http://localhost:5000/api/bookings', config).catch(() => ({ data: [] })),
-        axios.get('http://localhost:5000/api/users', config).catch(() => ({ data: [] }))
+        axios.get('https://event-booking-backend-a858.onrender.com/api/events').catch(() => ({ data: [] })),
+        axios.get('https://event-booking-backend-a858.onrender.com/api/bookings', config).catch(() => ({ data: [] })),
+        axios.get('https://event-booking-backend-a858.onrender.com/api/users', config).catch(() => ({ data: [] }))
       ]);
 
       setEvents(eventsRes.data || []);
@@ -63,7 +63,7 @@ export default function Dashboard() {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/bookings/cancel-seats', {
+      await axios.post('https://event-booking-backend-a858.onrender.com/api/bookings/cancel-seats', {
         eventId,
         cancelCount: countToCancel
       }, {
@@ -95,7 +95,7 @@ export default function Dashboard() {
         bannerUrl: eventForm.bannerUrl
       };
 
-      await axios.post('http://localhost:5000/api/events', payload, {
+      await axios.post('https://event-booking-backend-a858.onrender.com/api/events', payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -110,7 +110,7 @@ export default function Dashboard() {
   const handleDeleteEvent = async (eventId) => {
     if (window.confirm('Are you sure you want to delete this event?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/events/${eventId}`);
+        await axios.delete(`https://event-booking-backend-a858.onrender.com/api/events/${eventId}`);
         alert('Event deleted successfully!');
         setEvents(events.filter(event => event._id !== eventId));
       } catch (err) {
@@ -134,7 +134,7 @@ export default function Dashboard() {
         totalSeats: Number(editingEvent.totalSeats || editingEvent.availableSeats) || 0
       };
 
-      await axios.put(`http://localhost:5000/api/events/${editingEvent._id}`, payload);
+      await axios.put(`https://event-booking-backend-a858.onrender.com/api/events/${editingEvent._id}`, payload);
       alert('Event updated successfully!');
       setEditingEvent(null);
       fetchDashboardData();

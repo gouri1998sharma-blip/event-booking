@@ -19,7 +19,7 @@ export default function EventDetails() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/events/${id}`)
+      .get(`https://event-booking-backend-a858.onrender.com/api/events/${id}`)
       .then((res) => setEvent(res.data))
       .catch((err) => console.error(err));
   }, [id]);
@@ -60,7 +60,7 @@ export default function EventDetails() {
     setTimeout(async () => {
       try {
         await axios.post(
-          "http://localhost:5000/api/bookings",
+          "https://event-booking-backend-a858.onrender.com/api/bookings",
           {
             eventId: id,
             seatsBooked: Number(seats),
