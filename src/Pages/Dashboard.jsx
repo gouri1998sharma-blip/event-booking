@@ -45,6 +45,24 @@ export default function Dashboard() {
     }
   };
 
+  // 🟢 DELETE USER HANDLER (UI DELETE FUNCTION)
+  const handleDeleteUser = async (userId, userName) => {
+    if (window.confirm(`Kya aap "${userName}" ko delete karna chahte hain?`)) {
+      try {
+        const token = localStorage.getItem('token');
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+
+        await axios.delete(`https://event-booking-backend-a858.onrender.com/api/users/${userId}`, config);
+        alert('User deleted successfully!');
+        
+        // Instant state update so table refreshes automatically
+        setUsers(users.filter(u => u._id !== userId));
+      } catch (err) {
+        alert(err.response?.data?.message || 'Failed to delete user.');
+      }
+    }
+  };
+
   // SMART PARTIAL TICKET CANCELLATION
   const handleCancelSeats = async (eventId, maxSeats) => {
     const inputCount = prompt(`You have ${maxSeats} seats booked for this event.\nHow many seats do you want to cancel?`, '1');
@@ -441,6 +459,7 @@ export default function Dashboard() {
                     <th style={{ padding: '0.85rem' }}>Name</th>
                     <th style={{ padding: '0.85rem' }}>Email</th>
                     <th style={{ padding: '0.85rem' }}>Role</th>
+                    <th style={{ padding: '0.85rem' }}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -450,10 +469,31 @@ export default function Dashboard() {
                         <td style={{ padding: '0.85rem' }}>{u.name}</td>
                         <td style={{ padding: '0.85rem' }}>{u.email}</td>
                         <td style={{ padding: '0.85rem' }}><strong>{u.role || 'user'}</strong></td>
+                        <td style={{ padding: '0.85rem' }}>
+                          {(u.role || '').toLowerCase() !== 'admin' ? (
+                            <button
+                              onClick={() => handleDeleteUser(u._id, u.name)}
+                              style={{
+                                padding: '0.4rem 0.8rem',
+                                background: '#FEE2E2',
+                                color: '#EF4444',
+                                border: 'none',
+                                borderRadius: '8px',
+                                fontWeight: 'bold',
+                                fontSize: '0.8rem',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              🗑️ Delete
+                            </button>
+                          ) : (
+                            <span style={{ fontSize: '0.8rem', color: '#94A3B8', fontWeight: '600' }}>Admin Account</span>
+                          )}
+                        </td>
                       </tr>
                     ))
                   ) : (
-                    <tr><td colSpan="3" style={{ textAlign: 'center', padding: '2rem' }}>No users found.</td></tr>
+                    <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>No users found.</td></tr>
                   )}
                 </tbody>
               </table>
